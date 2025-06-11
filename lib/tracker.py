@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from math import ceil
+
 
 class BirthdayTracker:
 
@@ -46,16 +48,28 @@ class BirthdayTracker:
         today = datetime.now()
         thirty_days_future = today + timedelta(days=30)
         next_thirty_days = dict(filter(lambda friend: 
-                                    datetime.strptime(friend[1], "%Y-%m-%d") <= thirty_days_future 
-                                    and datetime.strptime(friend[1], "%Y-%m-%d") >= today, 
+                                    datetime.strptime(friend[1], "%Y-%m-%d").replace(year=today.year) <= thirty_days_future 
+                                    and datetime.strptime(friend[1], "%Y-%m-%d").replace(year=today.year) >= today, 
                                     self.tracker.items()
                                     ))
+#      if next_thirty_days == {}:
+#          return next_thirty_days
+#           print(next_thirty_days)
+#          raise Exception("No upcoming birthdays")
         return next_thirty_days
 
-    def calculate_age(self, name):
-        #parameter:
-            #name: string 
+    def calculate_age(self):
         #returns: age from the name
         #no side effects 
         #use list from upcoming birthdays 
-        pass 
+        upcoming = self.upcoming_birthdays().items()
+        today = datetime.now()
+        name_age_dict ={}
+        for friend in upcoming:
+            datetime_birthday = datetime.strptime(friend[1], "%Y-%m-%d")
+            age = today - datetime_birthday
+            age_in_years = ceil(age.days / 365.25)
+            name_age_dict[friend[0]] = age_in_years
+
+        return name_age_dict
+

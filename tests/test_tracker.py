@@ -1,5 +1,5 @@
 import pytest
-from lib.tracker import BirthdayTracker
+from lib.tracker import *
 
 """
 Given a tracker is created 
@@ -62,13 +62,27 @@ We see a list of names and birthdays in the nexy 30 days
 """
 def test_show_birthdays_next_30_days():
     birthday_tracker = BirthdayTracker()
-    birthday_tracker.add_birthday('Jim', '2025-06-20') 
-    birthday_tracker.add_birthday('Bob', '2025-07-20') 
-    assert birthday_tracker.upcoming_birthdays() == {'Jim': '2025-06-20'}
+    birthday_tracker.add_birthday('Jim', '2020-06-20') 
+    birthday_tracker.add_birthday('Bob', '2020-07-20') 
+    assert birthday_tracker.upcoming_birthdays() == {'Jim': '2020-06-20'}
+
+def test_no_upcoming_birthdays():
+    birthday_tracker = BirthdayTracker()
+    birthday_tracker.add_birthday('Jim', '2020-08-20') 
+    birthday_tracker.add_birthday('Bob', '2020-07-20') 
+
+#    with pytest.raises(Exception) as err:
+#        birthday_tracker.upcoming_birthdays()
+#   err_message = 'No upcoming birthdays'
+# assert str(err.value) == err_message
+    assert birthday_tracker.upcoming_birthdays() == {}
 
 """
 Given we want to calculate the upcoming ages of friend with birthdays in next 30 days 
 We see a list of names and ages 
 """
-#birthday_tracker = BirthdayTracker()
-#birthday_tracker.calculate_ages() ==> {'name': 'age'}
+def test_ages_returned_for_upcoming_birthdays():
+    birthday_tracker = BirthdayTracker()
+    birthday_tracker.add_birthday('Jim', '2020-06-21') 
+    birthday_tracker.add_birthday('Bob', '2015-06-20')
+    assert birthday_tracker.calculate_age() == {'Jim': 5, 'Bob': 10}
